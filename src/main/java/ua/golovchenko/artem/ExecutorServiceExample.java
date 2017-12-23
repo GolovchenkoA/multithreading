@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class ExecutorServiceCheck {
+public class ExecutorServiceExample {
     private static ExecutorService es = Executors.newFixedThreadPool(10);
 
     public static void main(String[] args) {
