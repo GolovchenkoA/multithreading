@@ -6,12 +6,13 @@ import java.util.concurrent.Executors;
 
 public class CountDownLatchDemo
 {
-    final static int NTHREADS = 3;
+    private static final int NTHREADS = 3;
+    private static ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
+    private static CountDownLatch doneSignal = new CountDownLatch(NTHREADS);
+    private static CountDownLatch startSignal = new CountDownLatch(1);
 
-    public static void main(String[] args)
-    {
-        final CountDownLatch startSignal = new CountDownLatch(1);
-        final CountDownLatch doneSignal = new CountDownLatch(NTHREADS);
+    public static void main(String[] args){
+
         Runnable r = new Runnable(){
             public void run(){
                 try{
@@ -21,8 +22,7 @@ public class CountDownLatchDemo
                     Thread.sleep((int) (Math.random() * 1000));
                     doneSignal.countDown(); // reduce count on which
                     // main thread is ...
-                }                          // waiting
-                catch (InterruptedException ie){
+                } catch (InterruptedException ie){
                     System.err.println(ie);
                 }
             }
@@ -33,14 +33,17 @@ public class CountDownLatchDemo
                         ": " + s);
             }
         };
-        ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
+
         for (int i = 0; i < NTHREADS; i++)
             executor.execute(r);
+
         try{
             System.out.println("main thread doing something");
             Thread.sleep(1000); // sleep for 1 second
+
             startSignal.countDown(); // let all threads proceed
             System.out.println("main thread doing something else");
+
             doneSignal.await(); // wait for all threads to finish
             executor.shutdownNow();
         } catch (InterruptedException ie){
