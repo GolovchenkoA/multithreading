@@ -11,6 +11,7 @@ public class SemaphoreExample {
         Thread t1 = new Thread(new RunnableTask());
         Thread t2 = new Thread(new RunnableTask());
 
+        System.out.println(" Semaphores free: " + semaphore.availablePermits());
         t1.start();
         t2.start();
 
@@ -19,12 +20,16 @@ public class SemaphoreExample {
     private static class RunnableTask implements Runnable {
         public void run() {
             System.out.println(Thread.currentThread().getName() + " start and lock semaphore");
+
             try {
                 semaphore.acquire();
+                System.out.println(" Semaphores free: " + semaphore.availablePermits());
                 System.out.println(Thread.currentThread().getName() + " does something");
+
                 Thread.sleep(1000);
                 System.out.println(Thread.currentThread().getName() + " releasing semaphore");
                 semaphore.release();
+                System.out.println(" Semaphores free: " + semaphore.availablePermits());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
