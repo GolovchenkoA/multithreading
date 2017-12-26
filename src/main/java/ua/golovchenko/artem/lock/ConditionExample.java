@@ -4,6 +4,13 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/*
+    Note: didn’t use the try/finally idiom for ensuring that a lock is disposed of in
+Producer’s and Consumer’s run() methods because an exception isn't thrown from this
+context.
+
+ */
+
 public class ConditionExample {
 
     public static void main(String[] args) {
